@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler")
 const bcrypt = require('bcryptjs')
+const jwt = require('jsonwebtoken')
 const db = require('../database')
 
 // @desc    Register new user
@@ -28,7 +29,10 @@ const registerUser = asyncHandler( async (req, res) => {
             `INSERT INTO users (firstname, lastname, email, password) 
             VALUES('${firstname}', '${lastname}', '${email}', '${hashedPassword}')
         `)
-        res.json({msg: "User has been created"})
+        res.json({
+            msg: "User has been created", 
+            token: generateToken(user[0][0].id)
+        })
     }
 })
 
@@ -50,7 +54,8 @@ const loginUser = asyncHandler( async (req, res) => {
         res.json({
             id: user[0][0].id,
             name: user[0][0].firstname,
-            email: user[0][0].email
+            email: user[0][0].email,
+            token: generateToken(user[0][0].id)
         })
     } else {
         res.status(400)
@@ -58,6 +63,13 @@ const loginUser = asyncHandler( async (req, res) => {
     }
 
 })
+
+// Generate JWT
+const generateToken = (id) => {
+    return jwt.sign({id}, process.env.JWT_SECRET, {
+        expiresIn: "30d",
+    })
+}
 
 
 module.exports = {

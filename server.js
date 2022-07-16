@@ -11,5 +11,7 @@ app.use(errorHandler);
 
 // Routes
 app.use("/api/users", require("./routes/userRoutes"))
+app.use('/api/customers', require('./routes/customerRoutes'))
+
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
