@@ -14,7 +14,7 @@ const protect = asyncHandler( async (req, res, next) => {
             const decoded = jwt.verify(token, process.env.JWT_SECRET)
 
             // Get user from the token
-            req.user = await db.promise().query(`SELECT * from users where id = '${decoded.id}'`)
+            req.user = await db.promise().query(`SELECT id, firstname, lastname, email from users where id = '${decoded.id}'`)
 
             next()
         } catch (error) {

@@ -61,7 +61,12 @@ const loginUser = asyncHandler( async (req, res) => {
         res.status(400)
         throw new Error("Invalid credentials")
     }
+})
 
+const getCurrentUser = asyncHandler( async (req, res) => {
+    res.status(200).json({
+        user: req.user[0][0]
+    })
 })
 
 // Generate JWT
@@ -75,4 +80,5 @@ const generateToken = (id) => {
 module.exports = {
     registerUser,
     loginUser,
+    getCurrentUser,
 }
