@@ -73,7 +73,7 @@ const getSale = asyncHandler(async (req, res) => {
 // @access  Public
 const deleteSale = asyncHandler( async (req, res) => {
     const sale = await db.promise().query(`
-        SELECT * FROM saless where id = '${req.params.id}'
+        SELECT * FROM sales where id = '${req.params.id}'
     `)
 
     if (sale[0].length === 0) {
