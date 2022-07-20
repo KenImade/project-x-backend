@@ -3,7 +3,7 @@ const db = require('../database')
 
 // @desc    Get customers
 // @route   GET /api/customers
-// @access  Public
+// @access  Private
 const getAllCustomers = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     
@@ -20,12 +20,12 @@ const getAllCustomers = asyncHandler( async (req, res) => {
 
 // @desc    Create a customer
 // @route   POST /api/customers
-// @access  Public
+// @access  Private
+// @params name, address, email, phoneNumber
 const createCustomer = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     const {name, address, email, phoneNumber} = req.body;
 
-    // TODO: Check if customer exists with the same user
     const customer = await db.promise().query(
         `SELECT phone_number from customers WHERE user_id = ${id}
          AND phone_number = ${phoneNumber}
@@ -52,7 +52,7 @@ const createCustomer = asyncHandler( async (req, res) => {
 
 // @desc    Get a customer
 // @route   GET /api/customers/:id
-// @access  Public
+// @access  Private
 const getCustomer = asyncHandler(async (req, res) => {
     const customer = await db.promise().query(`
         SELECT * FROM customers where id = '${req.params.id}'
@@ -80,7 +80,7 @@ const getCustomer = asyncHandler(async (req, res) => {
 
 // @desc    Delete a customer
 // @route   DELETE /api/customers/:id
-// @access  Public
+// @access  Private
 const deleteCustomer = asyncHandler( async (req, res) => {
     const customer = await db.promise().query(`
         SELECT * FROM customers where id = '${req.params.id}'
@@ -117,6 +117,7 @@ const deleteCustomer = asyncHandler( async (req, res) => {
 // @desc    Update a customer
 // @route   UPDATE /api/customers
 // @access  Public
+// @params  name, address, email, phoneNumber
 const updateCustomer = asyncHandler( async (req, res) => {
     const {name, address, email, phoneNumber} = req.body;
 

@@ -6,6 +6,7 @@ const db = require('../database')
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
+// @params  firstname, lastname, email, password
 const registerUser = asyncHandler( async (req, res) => {
     const {firstname, lastname, email, password} = req.body
 
@@ -40,6 +41,7 @@ const registerUser = asyncHandler( async (req, res) => {
 // @desc    Login user
 // @route   POST /api/users/login
 // @access  Public
+// @params  email, password
 const loginUser = asyncHandler( async (req, res) => {
     const {email, password} = req.body;
 
@@ -64,6 +66,9 @@ const loginUser = asyncHandler( async (req, res) => {
     }
 })
 
+// @desc    Get logged in user
+// @route   POST /api/users/me
+// @access  Private
 const getCurrentUser = asyncHandler( async (req, res) => {
     res.status(200).json({
         user: req.user[0][0]

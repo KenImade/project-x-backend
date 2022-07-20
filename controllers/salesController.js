@@ -4,7 +4,7 @@ const db = require('../database')
 
 // @desc    Get sales   
 // @route   GET /api/sales
-// @access  Public
+// @access  Private
 const getAllSales = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
 
@@ -21,7 +21,8 @@ const getAllSales = asyncHandler( async (req, res) => {
 
 // @desc    Create a sale
 // @route   POST /api/sales
-// @access  Public
+// @access  Private
+// @params  description, amount, customerId
 const createSale = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     const {description, amount, customerId} = req.body;
@@ -40,7 +41,7 @@ const createSale = asyncHandler( async (req, res) => {
 
 // @desc    Get a sale
 // @route   GET /api/sales/:id
-// @access  Public
+// @access  Private
 const getSale = asyncHandler(async (req, res) => {
     const sale = await db.promise().query(`
         SELECT * FROM sales where id = '${req.params.id}'
@@ -69,7 +70,7 @@ const getSale = asyncHandler(async (req, res) => {
 
 // @desc    Delete a sale
 // @route   DELETE /api/sales/:id
-// @access  Public
+// @access  Private
 const deleteSale = asyncHandler( async (req, res) => {
     const sale = await db.promise().query(`
         SELECT * FROM sales where id = '${req.params.id}'
@@ -102,7 +103,8 @@ const deleteSale = asyncHandler( async (req, res) => {
 
 // @desc    Update a sale
 // @route   UPDATE /api/sales/:id
-// @access  Public
+// @access  Private
+// @params  description, amount
 const updateSale = asyncHandler( async (req, res) => {
     const {description, amount} = req.body;
 

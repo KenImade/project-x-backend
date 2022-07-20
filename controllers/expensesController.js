@@ -4,7 +4,7 @@ const db = require('../database')
 
 // @desc    Get expenses   
 // @route   GET /api/expenses
-// @access  Public
+// @access  Private
 const getAllExpenses = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
 
@@ -21,7 +21,8 @@ const getAllExpenses = asyncHandler( async (req, res) => {
 
 // @desc    Create an expense
 // @route   POST /api/expenses
-// @access  Public
+// @access  Private
+// @params  description, amount, customerId
 const createExpense = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     const {description, amount, customerId} = req.body;
@@ -43,7 +44,7 @@ const createExpense = asyncHandler( async (req, res) => {
 
 // @desc    Get an expense
 // @route   GET /api/expenses/:id
-// @access  Public
+// @access  Private
 const getExpense = asyncHandler(async (req, res) => {
     const expense = await db.promise().query(`
         SELECT * FROM expenses where id = '${req.params.id}'
@@ -72,7 +73,7 @@ const getExpense = asyncHandler(async (req, res) => {
 
 // @desc    Delete an expense
 // @route   DELETE /api/expenses/:id
-// @access  Public
+// @access  Private
 const deleteExpense = asyncHandler( async (req, res) => {
     const expense = await db.promise().query(`
         SELECT * FROM expenses where id = '${req.params.id}'
@@ -105,7 +106,8 @@ const deleteExpense = asyncHandler( async (req, res) => {
 
 // @desc    Update an expense
 // @route   UPDATE /api/expenses/:id
-// @access  Public
+// @access  Private
+// @params  description, amount
 const updateExpense = asyncHandler( async (req, res) => {
     const {description, amount} = req.body;
 
