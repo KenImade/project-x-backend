@@ -119,7 +119,7 @@ const updateExpense = asyncHandler( async (req, res) => {
     }
 
     // Check for user
-    if(!req.user) {
+    if(!req.user[0][0]) {
         res.status(401)
         throw new Error("User not found")
     }
