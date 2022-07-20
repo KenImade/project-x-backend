@@ -6,6 +6,3 @@ env_variables:
   DATABASE_URL: 'mysql://8wnf0x6a19ne:pscale_pw_v8QJXbiKDBCAM6K7IkrXyI0c7f_JOuUvl2NlRVSXxas@79qerhgskwu5.us-east-4.psdb.cloud/bookkeeping-app?ssl={"rejectUnauthorized":true}'
   JWT_SECRET: ken12345
 
-handlers:
-- url: /stylesheets
-  static_dir: stylesheets

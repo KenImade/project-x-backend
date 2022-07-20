@@ -17,7 +17,7 @@ app.use('/api/sales', require('./routes/salesRoutes'))
 app.use('/api/expenses', require('./routes/expensesRoutes'))
 
 app.get('/', (req, res) => {
-    res.send(path.join(__dirname) + 'views/index.html')
+    res.sendFile(path.join(__dirname) + 'views/index.html')
 })
 
 
