@@ -128,8 +128,8 @@ const updateSale = asyncHandler( async (req, res) => {
     }
 
     await db.promise.query(`
-        UPDATE customers 
-        SET name='${name}', address='${address}', email='${email}', phone_number='${phoneNumber}'
+        UPDATE sales 
+        SET description='${description}', amount='${amount}'
         WHERE id=${req.params.id} AND user_id = ${req.user[0][0].id}
     `)
 
