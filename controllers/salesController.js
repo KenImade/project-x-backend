@@ -7,16 +7,15 @@ const db = require('../database')
 // @access  Public
 const getAllSales = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
-    // const {page = 1, limit = 10} = req.query;
 
     const sales = await db.promise().query(`
         SELECT * FROM sales WHERE user_id = ${id} 
     `)
     
-    if (sales[0]) {
+    if (sales[0].length > 0) {
         res.status(200).json({total: sales[0].length, sales: sales[0]})
     } else {
-        res.status(400)
+        res.status(200).json({msg: "No sales found"})
     }
 })
 
@@ -82,7 +81,7 @@ const deleteSale = asyncHandler( async (req, res) => {
     }
 
     // Check for user
-    if(!req.user) {
+    if(!req.user[0][0]) {
         res.status(401)
         throw new Error("User not found")
     }
@@ -95,6 +94,7 @@ const deleteSale = asyncHandler( async (req, res) => {
 
     await db.promise.query(`
         DELETE FROM sales WHERE id=${req.params.id}
+        AND user_id = ${req.user[0][0].id}
     `)
 
     res.status(200).json({id: req.params.id})
@@ -104,25 +104,25 @@ const deleteSale = asyncHandler( async (req, res) => {
 // @route   UPDATE /api/sales/:id
 // @access  Public
 const updateSale = asyncHandler( async (req, res) => {
-    const {name, address, email, phoneNumber} = req.body;
+    const {description, amount} = req.body;
 
-    const customer = await db.promise().query(`
-        SELECT * FROM customers where id = '${req.params.id}'
+    const sale = await db.promise().query(`
+        SELECT * FROM sales where id = '${req.params.id}'
     `)
 
-    if (customer[0].length === 0) {
+    if (sale[0].length === 0) {
         res.status(400)
         throw new Error("Customer not found")
     }
 
     // Check for user
-    if(!req.user) {
+    if(!req.user[0][0]) {
         res.status(401)
         throw new Error("User not found")
     }
 
     // Make sure the logged in user matches the user_id in customer
-    if (customer[0][0].user_id !== req.user[0][0].id) {
+    if (sale[0][0].user_id !== req.user[0][0].id) {
         res.status(401)
         throw new Error("User not authorized")
     }
@@ -130,10 +130,10 @@ const updateSale = asyncHandler( async (req, res) => {
     await db.promise.query(`
         UPDATE customers 
         SET name='${name}', address='${address}', email='${email}', phone_number='${phoneNumber}'
-        WHERE id=${req.params.id}
+        WHERE id=${req.params.id} AND user_id = ${req.user[0][0].id}
     `)
 
-    res.status(200).json({id: req.params.id})
+    res.status(201).json({id: req.params.id, msg: "Sale has been updated"})
 })
 
 
