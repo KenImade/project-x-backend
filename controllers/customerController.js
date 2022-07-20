@@ -6,7 +6,11 @@ const db = require('../database')
 // @access  Public
 const getAllCustomers = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
-    const {page = 1, limit = 10} = req.query;
+
+    if (!id) {
+        res.status(400)
+        throw new Error("User is not authorized")
+    }
     
     const customers = await db.promise().query(`
         SELECT * FROM customers WHERE user_id = ${id} 
@@ -26,14 +30,25 @@ const createCustomer = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     const {name, address, email, phoneNumber} = req.body;
 
+    // TODO: Check if customer exists with the same user
+    const customer = await db.promise().query(
+        `SELECT phone_number from customers WHERE user_id = ${id}`
+    )
+
+    if (customer) {
+        res.status(400)
+        throw new Error("Customer already exists for this user")
+    }
+
     if (!name || !phoneNumber || !id) {
         res.status(400)
-        res.json({msg: "Invalid request"})
+        throw new Error("Invalid request")
     } else {
         await db.promise().query(
             `INSERT INTO customers (name, address, email, phone_number, user_id)
             VALUES('${name}','${address}','${email}','${phoneNumber}','${id}' )
         `)
+        res.status(201)
         res.json({msg: "Customer created"})
     }
 })
@@ -127,14 +142,14 @@ const updateCustomer = asyncHandler( async (req, res) => {
 
     await db.promise().query(`
         UPDATE customers 
-        SET name='${name || customer[0][0].name}', 
-            address='${address || customer[0][0].address}', 
-            email='${email || customer[0][0].email}', 
-            phone_number='${phoneNumber || customer[0][0].phoneNumber}'
+        SET name='${name}', 
+            address='${address}', 
+            email='${email}', 
+            phone_number='${phoneNumber}'
         WHERE id=${req.params.id}
     `)
 
-    res.status(200).json({id: req.params.id})
+    res.status(201).json({id: req.params.id})
 })
 
 
