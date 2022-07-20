@@ -2,18 +2,18 @@ const asyncHandler = require("express-async-handler")
 const db = require('../database')
 
 
-// @desc    Get sales
+// @desc    Get sales   
 // @route   GET /api/sales
 // @access  Public
 const getAllSales = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
-    const {page = 1, limit = 10} = req.query;
+    // const {page = 1, limit = 10} = req.query;
 
     const sales = await db.promise().query(`
         SELECT * FROM sales WHERE user_id = ${id} 
     `)
     
-    if (customers[0][0]) {
+    if (sales[0]) {
         res.status(200).json({total: sales[0].length, sales: sales[0]})
     } else {
         res.status(400)
@@ -47,13 +47,14 @@ const getSale = asyncHandler(async (req, res) => {
         SELECT * FROM sales where id = '${req.params.id}'
     `)
 
+    // Check if sale exists
     if (sale[0].length === 0) {
         res.status(400)
         throw new Error("Sale not found")
     }
 
     // Check for user
-    if(!req.user) {
+    if(!req.user[0][0]) {
         res.status(401)
         throw new Error("User not found")
     }
