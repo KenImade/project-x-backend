@@ -1,8 +1,8 @@
 const express = require("express");
-const dotenv = require("dotenv").config();
-const {errorHandler} = require('./middleware/errorMiddleware')
-const port = process.env.PORT || 5000;
 const path = require("path")
+const dotenv = require("dotenv").config();
+const {errorHandler} = require(path.join(__dirname) +'/middleware/errorMiddleware.js')
+const port = process.env.PORT || 5000;
 const app = express();
 
 // Middlewares
@@ -11,13 +11,13 @@ app.use(express.urlencoded({extended: false}))
 app.use(errorHandler);
 
 // Routes
-app.use("/api/users", require("./routes/userRoutes"))
-app.use('/api/customers', require('./routes/customerRoutes'))
-app.use('/api/sales', require('./routes/salesRoutes'))
-app.use('/api/expenses', require('./routes/expensesRoutes'))
+app.use('/api/users', require(path.join(__dirname) + '/routes/userRoutes'))
+app.use('/api/customers', require(path.join(__dirname) + '/routes/customerRoutes'))
+app.use('/api/sales', require(path.join(__dirname) + '/routes/salesRoutes'))
+app.use('/api/expenses', require(path.join(__dirname) + '/routes/expensesRoutes'))
 
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname) + 'views/index.html')
+    res.sendFile(path.join(__dirname) + '/views/index.html')
 })
 
 

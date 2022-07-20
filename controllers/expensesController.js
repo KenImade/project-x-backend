@@ -1,5 +1,6 @@
 const asyncHandler = require("express-async-handler")
-const db = require('../database')
+const path = require("path")
+const db = require(path.join(__dirname,'..','database.js'))
 
 
 // @desc    Get expenses   

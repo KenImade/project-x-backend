@@ -1,5 +1,6 @@
+const path = require("path")
 const asyncHandler = require("express-async-handler")
-const db = require('../database')
+const db = require(path.join(__dirname,'..','database.js'))
 
 // @desc    Get customers
 // @route   GET /api/customers

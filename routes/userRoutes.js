@@ -1,7 +1,13 @@
 const express = require('express')
 const router = express.Router()
-const {registerUser, loginUser, getCurrentUser} = require('../controllers/userController')
-const {protect} = require('../middleware/authMiddleware')
+const path = require("path")
+
+const {
+    registerUser, 
+    loginUser, 
+    getCurrentUser
+} = require(path.join(__dirname,'..','controllers','userController.js'))
+const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.js'))
 
 
 router.post('/', registerUser)

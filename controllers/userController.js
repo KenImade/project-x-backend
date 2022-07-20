@@ -1,7 +1,8 @@
 const asyncHandler = require("express-async-handler")
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
-const db = require('../database')
+const path = require("path")
+const db = require(path.join(__dirname,'..','database.js'))
 
 // @desc    Register new user
 // @route   POST /api/users

@@ -1,8 +1,15 @@
 const express = require('express')
+const path = require("path")
 const router = express.Router()
 
-const {protect} = require('../middleware/authMiddleware')
-const {createExpense, getAllExpenses, getExpense, updateExpense, deleteExpense} = require('../controllers/expensesController')
+const {
+    createExpense, 
+    getAllExpenses, 
+    getExpense, 
+    updateExpense, 
+    deleteExpense
+} = require(path.join(__dirname,'..','controllers','expensesController.js'))
+const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.js'))
 
 router.post('/', protect, createExpense)
 router.get('/', protect, getAllExpenses)
