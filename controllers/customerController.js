@@ -6,11 +6,6 @@ const db = require('../database')
 // @access  Public
 const getAllCustomers = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
-
-    if (!id) {
-        res.status(400)
-        throw new Error("User is not authorized")
-    }
     
     const customers = await db.promise().query(`
         SELECT * FROM customers WHERE user_id = ${id} 
@@ -32,10 +27,12 @@ const createCustomer = asyncHandler( async (req, res) => {
 
     // TODO: Check if customer exists with the same user
     const customer = await db.promise().query(
-        `SELECT phone_number from customers WHERE user_id = ${id}`
+        `SELECT phone_number from customers WHERE user_id = ${id}
+         AND phone_number = ${phoneNumber}
+        `
     )
 
-    if (customer) {
+    if (customer[0].length !== 0) {
         res.status(400)
         throw new Error("Customer already exists for this user")
     }
@@ -73,7 +70,7 @@ const getCustomer = asyncHandler(async (req, res) => {
     }
 
     // Make sure the logged in user matches the user_id in customer
-    if (customer[0][0].user_id !== req.user[0][0]) {
+    if (customer[0][0].user_id !== req.user[0][0].id) {
         res.status(401)
         throw new Error("User not authorized")
     }
@@ -101,16 +98,20 @@ const deleteCustomer = asyncHandler( async (req, res) => {
     }
 
     // Make sure the logged in user matches the user_id in customer
-    if (customer[0][0].user_id !== req.user[0][0]) {
+    if (customer[0][0].user_id !== req.user[0][0].id) {
         res.status(401)
         throw new Error("User not authorized")
     }
 
-    await db.promise.query(`
+    await db.promise().query(`
         DELETE FROM customers WHERE id=${req.params.id}
+        AND user_id=${req.user[0][0].id}
     `)
 
-    res.status(200).json({id: req.params.id})
+    res.status(202).json({
+        id: req.params.id,
+        msg: "Customer has been deleted"
+    })
 })
 
 // @desc    Update a customer
@@ -147,9 +148,13 @@ const updateCustomer = asyncHandler( async (req, res) => {
             email='${email}', 
             phone_number='${phoneNumber}'
         WHERE id=${req.params.id}
+        AND user_id=${req.user[0][0].id}
     `)
 
-    res.status(201).json({id: req.params.id})
+    res.status(201).json({
+        id: req.params.id,
+        msg: "Customer info has been updated"
+    })
 })
 
 
