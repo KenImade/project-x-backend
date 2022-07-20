@@ -1,5 +1,5 @@
 {
-  "name": "project-x-backend",
+  "name": "bojuto",
   "version": "1.0.0",
   "description": "backend for bookkeeping app",
   "main": "server.js",
@@ -7,7 +7,7 @@
     "start": "node server.js",
     "server": "nodemon server.js"
   },
-  "author": "",
+  "author": "Kenneth Imade",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
