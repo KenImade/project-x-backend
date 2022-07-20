@@ -1,5 +1,4 @@
 const asyncHandler = require("express-async-handler")
-const bcrypt = require('bcryptjs')
 const db = require('../database')
 
 // @desc    Get customers
@@ -8,7 +7,7 @@ const db = require('../database')
 const getAllCustomers = asyncHandler( async (req, res) => {
     const {id} = req.user[0][0];
     const {page = 1, limit = 10} = req.query;
-
+    
     const customers = await db.promise().query(`
         SELECT * FROM customers WHERE user_id = ${id} 
     `)
@@ -35,7 +34,7 @@ const createCustomer = asyncHandler( async (req, res) => {
             `INSERT INTO customers (name, address, email, phone_number, user_id)
             VALUES('${name}','${address}','${email}','${phoneNumber}','${id}' )
         `)
-        res.json({msg: "User created"})
+        res.json({msg: "Customer created"})
     }
 })
 
@@ -59,7 +58,7 @@ const getCustomer = asyncHandler(async (req, res) => {
     }
 
     // Make sure the logged in user matches the user_id in customer
-    if (customer[0][0].user_id !== req.user[0][0].id) {
+    if (customer[0][0].user_id !== req.user[0][0]) {
         res.status(401)
         throw new Error("User not authorized")
     }
@@ -87,7 +86,7 @@ const deleteCustomer = asyncHandler( async (req, res) => {
     }
 
     // Make sure the logged in user matches the user_id in customer
-    if (customer[0][0].user_id !== req.user[0][0].id) {
+    if (customer[0][0].user_id !== req.user[0][0]) {
         res.status(401)
         throw new Error("User not authorized")
     }
@@ -126,9 +125,12 @@ const updateCustomer = asyncHandler( async (req, res) => {
         throw new Error("User not authorized")
     }
 
-    await db.promise.query(`
+    await db.promise().query(`
         UPDATE customers 
-        SET name='${name}', address='${address}', email='${email}', phone_number='${phoneNumber}'
+        SET name='${name || customer[0][0].name}', 
+            address='${address || customer[0][0].address}', 
+            email='${email || customer[0][0].email}', 
+            phone_number='${phoneNumber || customer[0][0].phoneNumber}'
         WHERE id=${req.params.id}
     `)
 

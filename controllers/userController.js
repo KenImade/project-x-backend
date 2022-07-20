@@ -29,6 +29,7 @@ const registerUser = asyncHandler( async (req, res) => {
             `INSERT INTO users (firstname, lastname, email, password) 
             VALUES('${firstname}', '${lastname}', '${email}', '${hashedPassword}')
         `)
+        const user = await db.promise().query(`SELECT * FROM users WHERE email='${email}'`)
         res.json({
             msg: "User has been created", 
             token: generateToken(user[0][0].id)
