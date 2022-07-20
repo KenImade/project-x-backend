@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv").config();
 const {errorHandler} = require('./middleware/errorMiddleware')
 const port = process.env.PORT || 5000;
+const path = require("path")
 const app = express();
 
 // Middlewares
@@ -15,7 +16,9 @@ app.use('/api/customers', require('./routes/customerRoutes'))
 app.use('/api/sales', require('./routes/salesRoutes'))
 app.use('/api/expenses', require('./routes/expensesRoutes'))
 
-app.get('/', (req, res) => res.send('Bojuto backend is up'));
+app.get('/', (req, res) => {
+    res.send(path.join(__dirname) + 'views/index.html')
+})
 
 
 app.listen(port, () => console.log(`Server started on port ${port}`))
