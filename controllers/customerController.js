@@ -46,8 +46,13 @@ const createCustomer = asyncHandler( async (req, res) => {
             `INSERT INTO customers (name, address, email, phone_number, user_id)
             VALUES('${name}','${address}','${email}','${phoneNumber}','${id}' )
         `)
+        const customer = await db.promise().query(
+            `SELECT * from customers WHERE user_id = ${id}
+             AND phone_number = ${phoneNumber}
+            `
+        )
         res.status(201)
-        res.json({msg: "Customer created"})
+        res.json({customer: customer[0][0]})
     }
 })
 
@@ -55,6 +60,10 @@ const createCustomer = asyncHandler( async (req, res) => {
 // @route   GET /api/customers/:id
 // @access  Private
 const getCustomer = asyncHandler(async (req, res) => {
+    if (!req.params.id) {
+        throw new Error("Customer does not exist")
+    }
+
     const customer = await db.promise().query(`
         SELECT * FROM customers where id = '${req.params.id}'
     `)
@@ -65,7 +74,7 @@ const getCustomer = asyncHandler(async (req, res) => {
     }
 
     // Check for user
-    if(!req.user) {
+    if(!req.user[0][0]) {
         res.status(401)
         throw new Error("User not found")
     }
@@ -76,13 +85,24 @@ const getCustomer = asyncHandler(async (req, res) => {
         throw new Error("User not authorized")
     }
 
-    res.status(200).json(customer[0][0])
+    res.status(200).json({
+        id: customer[0][0].id,
+        name: customer[0][0].name,
+        address: customer[0][0].address,
+        email: customer[0][0].email,
+        phoneNumber: customer[0][0].phone_number
+    })
 })
 
 // @desc    Delete a customer
 // @route   DELETE /api/customers/:id
 // @access  Private
 const deleteCustomer = asyncHandler( async (req, res) => {
+
+    if (!req.params.id) {
+        throw new Error("Customer does not exist")
+    }
+
     const customer = await db.promise().query(`
         SELECT * FROM customers where id = '${req.params.id}'
     `)
@@ -116,11 +136,19 @@ const deleteCustomer = asyncHandler( async (req, res) => {
 })
 
 // @desc    Update a customer
-// @route   UPDATE /api/customers
+// @route   UPDATE /api/customers/:id
 // @access  Public
 // @params  name, address, email, phoneNumber
 const updateCustomer = asyncHandler( async (req, res) => {
     const {name, address, email, phoneNumber} = req.body;
+
+    if (!req.params.id) {
+        throw new Error("Customer does not exist")
+    }
+
+    if (!(req.user[0][0].id)) {
+        throw new Error("User not found")
+    }
 
     const customer = await db.promise().query(`
         SELECT * FROM customers where id = '${req.params.id}'
@@ -153,9 +181,16 @@ const updateCustomer = asyncHandler( async (req, res) => {
         AND user_id=${req.user[0][0].id}
     `)
 
+    const updatedCustomer = await db.promise().query(`
+        SELECT * FROM customers where id = '${req.params.id}'
+    `)
+
+    if (!(updatedCustomer[0][0])) {
+        throw new Error("Customer could not be updated")
+    }
+
     res.status(201).json({
-        id: req.params.id,
-        msg: "Customer info has been updated"
+        customer: updatedCustomer[0][0]
     })
 })
 
