@@ -72,7 +72,7 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *  post:
  *      security:
  *          - bearerAuth: []
- *      summary: Creates a new cutomer for the logged in user
+ *      summary: Creates a new customer for the logged in user
  *      tags: [Customers]
  *      requestBody:
  *          required: true
