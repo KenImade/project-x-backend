@@ -92,6 +92,11 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *              content: 
  *                  text/html:
  *                      $ref: '#/components/schemas/error401'
+ *          401:
+ *              description: Unauthorized
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
  */
 router.post('/', protect, createCustomer)
 
@@ -104,7 +109,7 @@ router.post('/', protect, createCustomer)
  *      summary: Returns a list of customers
  *      tags: [Customers]
  *      responses:
- *          '200':
+ *          200:
  *              description: A JSON array of user objects
  *              content:
  *                  application/json:
@@ -112,6 +117,21 @@ router.post('/', protect, createCustomer)
  *                          type: array
  *                          items:
  *                              $ref: '#/components/schemas/Customer'
+ *          401:
+ *             description: Unauthorized
+ *             content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          404:
+ *             description: Customer list was not found
+ *             content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
 */
 router.get('/', protect, getAllCustomers)
 
@@ -139,6 +159,11 @@ router.get('/', protect, getAllCustomers)
  *                          $ref: '#/components/schemas/Customer'
  *          404:
  *              description: The customer was not found or does not belong to this customer
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          401:
+ *              description: Unauthorized
  *              content:
  *                  text/html:
  *                      $ref: '#/components/schemas/error401'
@@ -182,7 +207,7 @@ router.get('/:id', protect, getCustomer)
  *                              description: customer phone number
  *      responses:
  *          200:
- *           description: The book was updated
+ *           description: The customer was updated
  *           content:
  *              application/json:
  *                  schema:
@@ -206,9 +231,14 @@ router.get('/:id', protect, getCustomer)
  *           content:
  *                  text/html:
  *                      $ref: '#/components/schemas/error401'
- *          500:
+ *          401:
  *           description: Unauthorized User
  *           content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          500:
+ *            description: Internal server error
+ *            content:
  *                  text/html:
  *                      $ref: '#/components/schemas/error401'
  */
@@ -229,6 +259,33 @@ router.put('/:id', protect, updateCustomer)
  *                  type: integer
  *              required: true
  *              description: The customer id
+ *      responses:
+ *          200: 
+ *              description: The customer was deleted
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          Message:
+ *                              type: object
+ *                              properties:
+ *                                  message:
+ *                                      type: string
+ *                                      description: Delete confirmation message
+ *          404:
+ *              description: The customer was not found
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          401:
+ *              description: Unauthorized
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
+ *          500:
+ *              description: Internal server error
+ *              content:
+ *                  text/html:
+ *                      $ref: '#/components/schemas/error401'
  */
 router.delete('/:id', protect, deleteCustomer)
 
