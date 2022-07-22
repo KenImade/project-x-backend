@@ -31,10 +31,10 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *              - user_id
  *          properties:
  *              id: 
- *                  type: int
+ *                  type: integer
  *                  description: id of the customer
  *              user_id:
- *                  type: int
+ *                  type: integer
  *                  description: The id of the user 
  *              name:
  *                  type: string
