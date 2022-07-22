@@ -7,29 +7,31 @@ const db = require(path.join(__dirname,'..','database.js'))
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
-// @params  firstname, lastname, email, password
+// @params  firstname, lastname, email, phoneNumber, password 
 const registerUser = asyncHandler( async (req, res) => {
-    const {firstname, lastname, email, password} = req.body
+    const {firstname, lastname, email, phoneNumber, password} = req.body
 
     // validate input
-    if (!firstname || !lastname || !email || !password) {
+    if (!firstname || !lastname ||!password || !phoneNumber) {
         res.status(400)
         throw new Error("Please add all fields")
     }
 
     // Check if user exists
-    const userExists = await db.promise().query(`SELECT email FROM users WHERE email = '${email}'`)
+    const userExists = await db.promise().query(`SELECT * FROM users WHERE ${email ? 'email' : 'phone_number'} = '${email ?  email : phoneNumber}'`)
+    
 
-    if (!(userExists[0].length === 0)) {
+    if (userExists[0].length !== 0) {
+        console.log(userExists[0])
         res.status(400)
-        res.json({msg: "User already exists"})
+        throw new Error("User already exists")
     } else {
         const salt = await bcrypt.genSalt(10)
         const hashedPassword = await bcrypt.hash(password, salt)
-        res.status(201)
+        res.status(200)
         await db.promise().query(
-            `INSERT INTO users (firstname, lastname, email, password) 
-            VALUES('${firstname}', '${lastname}', '${email}', '${hashedPassword}')
+            `INSERT INTO users (firstname, lastname, email, phone_number, password) 
+            VALUES('${firstname}', '${lastname}', '${email}', '${phoneNumber}', '${hashedPassword}')
         `)
         const user = await db.promise().query(`SELECT * FROM users WHERE email='${email}'`)
         res.json({
@@ -42,16 +44,16 @@ const registerUser = asyncHandler( async (req, res) => {
 // @desc    Login user
 // @route   POST /api/users/login
 // @access  Public
-// @params  email, password
+// @params  email, phoneNumber, password
 const loginUser = asyncHandler( async (req, res) => {
-    const {email, password} = req.body;
+    const {email, phoneNumber, password} = req.body;
 
-    if (!email || !password) {
+    if ((!email || !phoneNumber) || !password) {
         res.status(400)
         throw new Error("Invalid credentials")
     }
 
-    const user = await db.promise().query(`SELECT * FROM users WHERE email='${email}'`)
+    const user = await db.promise().query(`SELECT * FROM users WHERE ${email ? 'email': 'phone_number'}='${email ? email : phoneNumber}'`)
 
     if (user && (await bcrypt.compare(password, user[0][0].password))) {
         res.status(200)
@@ -59,6 +61,7 @@ const loginUser = asyncHandler( async (req, res) => {
             id: user[0][0].id,
             name: user[0][0].firstname,
             email: user[0][0].email,
+            phoneNumber: user[0][0].phone_number,
             token: generateToken(user[0][0].id)
         })
     } else {
