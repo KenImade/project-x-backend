@@ -38,7 +38,7 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *                  type: string
  *                  description: description of the sale
  *              amount:
- *                  type: double
+ *                  type: number
  *                  description: sale amount
  *              transactionDate:
  *                  type: string
@@ -118,7 +118,7 @@ router.get('/', protect, getAllSales)
  *                              type: string
  *                              description: details of sale
  *                          amount:
- *                              type: double
+ *                              type: number
  *                              description: sale amount
  *                          transactionDate:
  *                              type: string
@@ -172,7 +172,7 @@ router.post('/', protect, createSale)
  *              content:
  *                  application/json:
  *                      schema:
- *                          $ref: '#/components/schemas/Sale'
+ *                          $ref: '#/components/schemas/Sales'
  *          404:
  *              description: The sale was not found or does not belong to this customer
  *              content:
@@ -213,7 +213,7 @@ router.get('/:id', protect, getSale)
  *                                  type: string
  *                                  description: sale details
  *                          amount:
- *                                  type: double
+ *                                  type: number
  *                                  description: sale amount
  *                          transactionDate:
  *                                  type: string

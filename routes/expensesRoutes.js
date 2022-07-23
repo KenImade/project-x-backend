@@ -38,7 +38,7 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *                  type: string
  *                  description: description of the sale
  *              amount:
- *                  type: double
+ *                  type: number
  *                  description: expense amount
  *              transactionDate:
  *                  type: string
@@ -118,7 +118,7 @@ router.get('/', protect, getAllExpenses)
  *                              type: string
  *                              description: details of expense
  *                          amount:
- *                              type: double
+ *                              type: number
  *                              description: expense amount
  *                          transactionDate:
  *                              type: string
@@ -213,7 +213,7 @@ router.get('/:id', protect, getExpense)
  *                                  type: string
  *                                  description: expense details
  *                          amount:
- *                                  type: double
+ *                                  type: number
  *                                  description: expense amount
  *                          transactionDate:
  *                                  type: string
