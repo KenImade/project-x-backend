@@ -5,6 +5,7 @@ const swaggerUi = require("swagger-ui-express")
 const swaggerJsDoc = require("swagger-jsdoc")
 const {errorHandler} = require(path.join(__dirname) +'/middleware/errorMiddleware.js')
 const swaggerOptions = require(path.join(__dirname) + '/swagger.js')
+const cors = require("cors")
 const port = process.env.PORT || 5000;
 const app = express();
 
@@ -14,6 +15,12 @@ const swaggerDocs = swaggerJsDoc(swaggerOptions)
 app.use(express.json())
 app.use(express.urlencoded({extended: false}))
 app.use(errorHandler);
+app.use(
+    cors({
+        origin: "https://bojuto.netlify.app/",
+        methods: ["GET","HEAD","PUT","POST","DELETE"],
+    })
+)
 
 // Routes
 app.use('/api/users', require(path.join(__dirname) + '/routes/userRoutes'))
