@@ -110,7 +110,7 @@ router.post('/', protect, createCustomer)
  *      tags: [Customers]
  *      responses:
  *          200:
- *              description: A JSON array of user objects
+ *              description: A JSON array of customer objects
  *              content:
  *                  application/json:
  *                      schema:
