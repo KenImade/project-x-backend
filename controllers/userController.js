@@ -46,14 +46,17 @@ const registerUser = asyncHandler( async (req, res) => {
 // @access  Public
 // @params  email, phoneNumber, password
 const loginUser = asyncHandler( async (req, res) => {
-    const {email, phoneNumber, password} = req.body;
+    const userCredentials = req.body;
 
-    if ((!email || !phoneNumber) || !password) {
+    if ((!userCredentials.email && !userCredentials.phoneNumber) || !userCredentials.password) {
         res.status(400)
         throw new Error("Invalid credentials")
     }
 
-    const user = await db.promise().query(`SELECT * FROM users WHERE ${email ? 'email': 'phone_number'}='${email ? email : phoneNumber}'`)
+    const user = await db.promise().query(
+        `SELECT * FROM users WHERE ${userCredentials.email ? 'email': 'phone_number'} 
+        ='${userCredentials.email ? userCredentials.email : userCredentials.phoneNumber}'
+    `)
 
     if (user && (await bcrypt.compare(password, user[0][0].password))) {
         res.status(200)
