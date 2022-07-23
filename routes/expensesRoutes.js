@@ -271,7 +271,7 @@ router.put('/:id', protect, updateExpense)
  *              description: The expense id
  *      responses:
  *          200:
- *              description: The customer was deleted
+ *              description: The expense was deleted
  *              content:
  *                  application/json:
  *                      schema:

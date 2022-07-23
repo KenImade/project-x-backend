@@ -16,7 +16,8 @@ const getAllExpenses = asyncHandler( async (req, res) => {
     if (expenses[0].length > 0) {
         res.status(200).json({total: expenses[0].length, expenses: expenses[0]})
     } else {
-        res.status(200).json({msg: "No expenses found"})
+        res.status(404)
+        throw new Error("No expenses found")
     }
 })
 
@@ -111,11 +112,11 @@ const updateExpense = asyncHandler( async (req, res) => {
 
     await db.promise().query(`
         UPDATE expenses 
-        SET description='${description}', amount='${amount}'
+        SET description='${description}', amount='${amount}', transaction_date = '${transactionDate}', customer_id = '${customerId}'
         WHERE id=${req.params.id} AND user_id = ${req.user[0][0].id}
     `)
 
-    res.status(201).json({
+    res.status(200).json({
         id: req.params.id,
         msg: "Expense has been updated"
     })
