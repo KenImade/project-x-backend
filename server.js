@@ -20,7 +20,7 @@ app.use('/api/users', require(path.join(__dirname) + '/routes/userRoutes'))
 app.use('/api/customers', require(path.join(__dirname) + '/routes/customerRoutes'))
 app.use('/api/sales', require(path.join(__dirname) + '/routes/salesRoutes'))
 app.use('/api/expenses', require(path.join(__dirname) + '/routes/expensesRoutes'))
-app.use('/api/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
+app.use('/swagger', swaggerUi.serve, swaggerUi.setup(swaggerDocs))
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname) + '/views/index.html')
