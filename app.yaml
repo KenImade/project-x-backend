@@ -1,13 +1,4 @@
 runtime: nodejs16 # or another supported version
 
-instance_class: F2
-
-env_variables:
-  DATABASE_URL: 'mysql://mxxdoatxhoue:pscale_pw_xJalK9ZrIq2_VmAHcSrg6J7F-KWLH8OdEBx8nUPh3xc@79qerhgskwu5.us-east-4.psdb.cloud/bookkeeping-app?ssl={"rejectUnauthorized":true}'
-  JWT_SECRET: ken12345
-  DATABASE: bookkeeping-app
-  USERNAME: mxxdoatxhoue
-  HOST: 79qerhgskwu5.us-east-4.psdb.cloud
-  PASSWORD: pscale_pw_xJalK9ZrIq2_VmAHcSrg6J7F-KWLH8OdEBx8nUPh3xc
 
 

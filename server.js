@@ -17,7 +17,7 @@ app.use(express.urlencoded({extended: false}))
 app.use(errorHandler);
 app.use(
     cors({
-        origin: "https://bojuto.netlify.app/",
+        origin: "*",
         methods: ["GET","HEAD","PUT","POST","DELETE"],
     })
 )
