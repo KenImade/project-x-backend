@@ -69,7 +69,7 @@ const {protect} = require(path.join(__dirname,'..','middleware','authMiddleware.
  *  get:
  *      security:
  *          - bearerAuth: []
- *      summary: Gets all exenses for the user
+ *      summary: Gets all expenses for the user
  *      tags: [Expenses]
  *      responses:
  *          200:
@@ -259,7 +259,7 @@ router.put('/:id', protect, updateExpense)
  * /api/expenses/{id}:
  *  delete:
  *      security:
- *          bearerAuth: []
+ *          - bearerAuth: []
  *      summary: Delete the expense by the id
  *      tags: [Expenses]
  *      parameters:
