@@ -1,0 +1,21 @@
+doctype html
+html(lang='en')
+    head
+        title= title
+        meta(charset='utf-8')
+        meta(name='viewport', content='width=device-width, initial-scale=1')
+        link(rel="apple-touch-icon", sizes="180x180" href="/images/apple-touch-icon.png")
+        link(rel="icon", type="image/x-icon" href="/images/favicon.ico")
+        link(rel="icon", type="image/png" sizes="32x32" href="/images/favicon-32x32.png")
+        link(rel="icon", type="image/png" sizes="16x16" href="/images/favicon-16x16.png")
+        link(rel="manifest", href="/manifest.json" crossorigin="use-credentials")
+        link(rel="stylesheet", href='/stylesheets/style.css')
+    body
+        nav(class="navbar")
+            img(src="/images/logo.png", alt="logo" class="logo")
+            div(class="nav-links")
+                a(href="/swagger" class="nav-link") Swagger documentation
+                a(href="https://bojuto.netlify.app/" target="_blank" class="nav-link") Try out the app
+        div(class='container')
+            h1 Welcome to the Backend for Bojuto
+            img(src="/images/background-img.png", alt="logo")
